@@ -1,0 +1,23 @@
+.Contacts-container{
+    display: grid;
+    grid-template-rows: 15%  1fr;
+    height: 100vh;
+}
+.chat-button-div{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    margin-right: 10px;
+    background:transparent;
+}
+.chat-button{
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    background-color: rgb(29, 219, 29);
+}
+.chat-button:hover{
+    cursor: pointer;
+    background-color: green;
+}

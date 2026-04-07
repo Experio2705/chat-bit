@@ -1,0 +1,105 @@
+.chat-container{
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 20% auto;
+    overflow: hidden;
+}
+.chat-left{
+    display: grid;
+    grid-template-rows: 15%  auto;
+}
+.search-members{
+    padding: 0% 10px 0px 10px;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    background-color: rgb(237, 235, 235);
+    border: solid 2px rgb(177, 176, 176);
+}
+.chat,.addcontacts,.status,.logout{
+    font-size: 1.3rem;
+}
+.addcontacts:hover,.status:hover,.logout:hover{
+    cursor: pointer;
+    border-radius: 30%;
+    border: 2px solid rgb(207, 205, 205);
+}
+.chat:hover{
+    cursor: pointer;
+}
+.addcontacts,.status,.logout{
+    background: none;
+}
+.chat-nav{
+    display: grid;
+    grid-template-columns: 60% 10% 10% 10% 10%;
+    justify-content: left;
+    align-items: center;
+}
+.chat-profile:hover{
+    cursor: pointer;
+}
+.chat-search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-search{
+    display: flex;
+    width: 100%;
+    background-color: rgb(214, 214, 214);
+    font-size: 1.3rem;
+    padding: 10px;
+    border-radius: 10px;
+}
+.form-search:focus-within{
+    border:2px solid grey
+}
+.text-search{
+    background: none;
+    border: none;
+    width: 100%;
+}
+.text-search:focus{
+    outline:none;
+}
+.chat-members{
+    grid-template-rows: 1fr;
+    border: solid 2px rgb(177, 176, 176);
+    border-top: none;
+    overflow-y: hidden;
+    background-color: rgb(244, 244, 244);
+}
+.chat-item{
+    display: flex;
+    height: 50px;
+    align-items: center;
+    padding: 10px 10px 10px 10px;
+}
+.chat-item:hover{
+    background-color: grey;
+    cursor: pointer;
+}
+.chat2-profile{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.chat-none{
+    display: block;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 3rem;
+    text-align: center;
+}
+.chat-none{
+    cursor: pointer;
+}
+.chat-none-icon{
+    background-color: rgb(192, 192, 192);
+    padding: 30px;
+    border-radius: 20px;
+}
+.chat-none-icon:hover{
+    background-color: white;
+}

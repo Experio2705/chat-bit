@@ -1,0 +1,33 @@
+.auth-container{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.otp-input {
+    width: 50px;
+    height: 55px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    border: 2px solid #dcdcdc;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.otp-input:focus {
+  border-color: rgb(21, 153, 32);
+  box-shadow: 0 0 5px rgba(21, 153, 32, 0.4);
+}
+
+.auth-button{
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    color: white;
+    background-color: rgb(21, 153, 32);
+}
+.auth-button:hover{
+    cursor: pointer;
+    background-color: rgb(21, 106, 28);
+}

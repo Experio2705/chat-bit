@@ -1,0 +1,36 @@
+*{
+    padding: 0px;
+    margin: 0px;
+    border:0px;
+}
+.cont{
+    display: grid;
+    grid-template-columns: 1fr auto auto auto ;
+    gap: 5px;
+    padding: 30px 90px 30px 90px;
+    height: auto;
+    align-items: center;
+    color: grey;
+}
+.privacy:hover{
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+}
+.terms:hover{
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+}
+.support:hover{
+    cursor: pointer;
+    color: rgb(61, 61, 61);
+}
+@media  screen and (max-width:600px) {
+    .cont{
+         padding: 30px 40px 30px 40px;
+    }
+}
+@media  screen and (max-width:450px) {
+    .cont{
+         padding: 30px 20px 30px 20px;
+    }
+}

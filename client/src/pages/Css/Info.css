@@ -1,0 +1,25 @@
+.image-upload{
+    margin-bottom: 20px;
+}
+.upload-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-img{
+    height: 120px;
+    width: 120px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+}
+.preview-img{
+    height: 120px;
+    width: 120px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+}
+.preview-img:hover{
+    cursor: pointer;
+}

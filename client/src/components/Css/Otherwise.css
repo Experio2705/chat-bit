@@ -1,0 +1,19 @@
+.chat-none{
+    display: block;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 3rem;
+    text-align: center;
+}
+.chat-none{
+    cursor: pointer;
+}
+.chat-none-icon{
+    background-color: rgb(192, 192, 192);
+    padding: 30px;
+    border-radius: 20px;
+}
+.chat-none-icon:hover{
+    background-color: white;
+}

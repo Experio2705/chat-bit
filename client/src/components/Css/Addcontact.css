@@ -1,0 +1,109 @@
+.Addcontact-container{
+    display: grid;
+    grid-template-rows: 10% 10% 1fr;
+    height: 100vh;
+}
+.addcontact{
+    background-color: rgba(4, 128, 14, 0.799);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+}
+.back-icon{
+    padding: 5px;
+    border-radius: 10px;
+    color: white;
+}
+.back-icon:hover{
+    background-color: rgba(90, 89, 89, 0.5);
+    color:black;
+    cursor: pointer;
+}
+.Add{
+    margin-left: 20px;
+    color:white;
+}
+.addcontact-search{
+    padding: 20px 10px 0px 10px;
+}
+.form-search-addcontact{
+    display: flex;
+    width: 96%;
+    background-color: rgb(214, 214, 214);
+    font-size: 1.3rem;
+    padding: 10px;
+    border-radius: 10px;
+    
+}
+.text-search-addcontact{
+    background: none;
+    border: none;
+    width: 100%;
+}
+.text-search-addcontact:focus{
+    outline:none;
+}
+.show-contact{
+    padding: 10px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+.show-contact-search{
+    font-size: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}
+.contact-list{
+    font-size: 4rem;
+    display: flex;
+    flex-direction: column;
+    height: 69%;
+    overflow-y: auto;
+}
+.contact-item{
+    height: 70px;
+    /* background-color: grey; */
+    border: 2px solid grey;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.contact-item:hover{
+    border-color: rgb(13, 199, 13);
+}
+.name-email-contact{
+    color: black;
+    font-size: 1rem;
+    margin-left: 20px ;
+}
+.chat-profile{
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+.add-contact-icon{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    width: 100%;
+    margin-right: 10px;
+}
+.contact-icon{
+    color: white;
+    padding: 5px;
+    background-color: rgb(10, 174, 10);
+    border-radius: 10px;
+}
+.contact-icon:hover{
+    cursor: pointer;
+    background-color: rgb(8, 107, 8);
+}
