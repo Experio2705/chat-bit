@@ -140,6 +140,12 @@
     background-size: contain;
 }
 
+.profile-outer{
+    height: 10%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+}
 .information{
     position: absolute;
     z-index: 1;

@@ -1,12 +1,26 @@
 .chat-container{
     height: 100vh;
     display: grid;
-    grid-template-columns: 20% auto;
+    grid-template-columns: 28% auto;
     overflow: hidden;
 }
 .chat-left{
     display: grid;
     grid-template-rows: 15%  auto;
+}
+.select-chat{
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-right: 3%;
+}
+.select-chat-button{
+    background-color: transparent;
+    font-size: 1.3rem;
+    display: flex;
+    border: none;
+    cursor: pointer;
 }
 .search-members{
     padding: 0% 10px 0px 10px;
@@ -16,12 +30,18 @@
     border: solid 2px rgb(177, 176, 176);
 }
 .chat,.addcontacts,.status,.logout{
-    font-size: 1.3rem;
-}
-.addcontacts:hover,.status:hover,.logout:hover{
+    font-size: 1.1rem;
     cursor: pointer;
-    border-radius: 30%;
-    border: 2px solid rgb(207, 205, 205);
+    margin: 5px;
+    text-align: left;
+    margin: 9px;
+    color: rgb(60, 60, 60)
+}
+.addcontacts:hover svg, 
+.status:hover svg, 
+.logout:hover svg {
+    color: green;
+    transition: color 0.2s ease; /* Makes the color change smooth */
 }
 .chat:hover{
     cursor: pointer;
@@ -31,7 +51,7 @@
 }
 .chat-nav{
     display: grid;
-    grid-template-columns: 60% 10% 10% 10% 10%;
+    grid-template-columns: 85% 10%;
     justify-content: left;
     align-items: center;
 }

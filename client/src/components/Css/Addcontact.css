@@ -55,9 +55,8 @@
     font-size: 4rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 70%;
+    height: 50%;
 }
 .contact-list{
     font-size: 4rem;

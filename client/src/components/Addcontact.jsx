@@ -15,6 +15,7 @@ const Addcontact = ({setView}) => {
     const[notfound,setNotfound]=useState(false);
     const[found,setFound]=useState(false);
     const [addedUsers, setAddedUsers] = useState([]);
+    const [exists,setExists]=useState(false);
     const handleChange=async(e)=>{
         const value=e.target.value;
         setFind(value);
@@ -45,19 +46,22 @@ const Addcontact = ({setView}) => {
     }
     const gotoChat=()=>{
         setView('otherwise');
-        console.log('clicked')
     }
     const handleAdd=async(user)=>{
         try{
-            const add_contact_id=user.id;
+            const contact_user_id=user.id;
             const add_contact_name=user.name;
             const add_contact_email=user.email;
             const add_contact_profilepic=user.profile_pic;
             const token=localStorage.getItem('token');
-            const res=await axios.post('http://localhost:8860/addcontact',{add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic},{headers:{Authorization:`Bearer ${token}`}});
+            // const res=await axios.post('http://localhost:8860/addcontact',{add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic},{headers:{Authorization:`Bearer ${token}`}});
+            const res=await axios.post('http://localhost:8860/addcontact',{contact_user_id},{headers:{Authorization:`Bearer ${token}`}});
             if(res.data.message==='Contactadded'){
                 setAddedUsers(prev => [...prev, user.id]);
                 window.location.reload() 
+            }
+            else if(res.data.message==='Conversation Exists'){
+                setExists(true);
             }
         }
         catch(err){
@@ -85,6 +89,7 @@ const Addcontact = ({setView}) => {
             {search && <div className='show-contact-search'><p><FontAwesomeIcon icon={faPersonCirclePlus} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Add new Contact</p></div>}
             {notfound && <div className='show-contact-search'><p><FontAwesomeIcon icon={faFaceFrown} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Not Found</p></div>}
             {found &&
+                exists?(<div className='show-contact-search'><p><FontAwesomeIcon icon={faFaceFrown} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Contact Already Exists</p></div>):(
                 <div className="contact-list">
                     {contact.map((user)=>(
                         <div key={user.id} className="contact-item">
@@ -98,6 +103,7 @@ const Addcontact = ({setView}) => {
                         </div>
                     ))}
                 </div>
+                )
             }
         </div>
     </div>

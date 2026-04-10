@@ -278,22 +278,92 @@ app.get('/add-contact',jwtAuthMiddleware,async(req,res)=>{
 })
 
 app.post('/addcontact',(jwtAuthMiddleware),async(req,res)=>{
-    try{
-        const {add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic}=req.body;
-        const userId=req.user.id;
-        const {data,error}=await supabase
-        .from('contacts')
-        .insert([{user_id:userId,contact_user_id:add_contact_id,name:add_contact_name,email:add_contact_email,profile_pic:add_contact_profilepic}])
-        .select();
-        if(error){
-             console.log(error);
-            return res.status(500).json({error:"Database Error"});
+    // try{
+    //     const {add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic}=req.body;
+    //     const userId=req.user.id;
+    //     const {data,error}=await supabase
+    //     .from('contacts')
+    //     .insert([{user_id:userId,contact_user_id:add_contact_id,name:add_contact_name,email:add_contact_email,profile_pic:add_contact_profilepic}])
+    //     .select();
+    //     if(error){
+    //          console.log(error);
+    //         return res.status(500).json({error:"Database Error"});
+    //     }
+    //     res.json({message:'Contactadded'});
+    // }
+    // catch(err){
+    //     return res.status(500).json({error:"Server Error"});
+    // }
+    try {
+
+    const userId = req.user.id;
+    const { contact_user_id } = req.body;
+
+    // ✅ get all conversations of user
+    const { data: userConvo, error } = await supabase
+      .from('conversation_members')
+      .select('conversation_id')
+      .eq('user_id', userId);
+
+    if (error) {
+      return res.status(500).json({ error: "Database Error" });
+    }
+
+    // ✅ check if conversation already exists
+    let existingConversation = null;
+
+    if (userConvo && userConvo.length > 0) {
+      for (let convo of userConvo) {
+        const { data } = await supabase
+          .from('conversation_members')
+          .select('*')
+          .eq('conversation_id', convo.conversation_id)
+          .eq('user_id', contact_user_id);
+
+        if (data.length > 0) {
+          existingConversation = convo.conversation_id;
+          break;
         }
-        res.json({message:'Contactadded'});
+      }
     }
-    catch(err){
-        return res.status(500).json({error:"Server Error"});
+
+    if (existingConversation) {
+      return res.json({
+        message: 'Conversation Exists',
+        conversationId: existingConversation
+      });
     }
+
+    const { data: newConvo, error: convoError } = await supabase
+      .from('conversations')
+      .insert([{ type: 'private', created_by: userId }])
+      .select()
+      .single();
+
+    if (convoError) {
+      return res.status(500).json({ error: "Conversation creation failed" });
+    }
+
+    // ✅ add members
+    const { error: memberError } = await supabase
+      .from('conversation_members')
+      .insert([
+        { conversation_id: newConvo.id, user_id: userId },
+        { conversation_id: newConvo.id, user_id: contact_user_id }
+      ]);
+
+    if (memberError) {
+      return res.status(500).json({ error: "Member insert failed" });
+    }
+
+    res.json({
+      message: 'Conversation Created',
+      conversationId: newConvo.id
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: 'Server Error' });
+  }
 })
 
 //contacts
@@ -302,15 +372,86 @@ app.get('/contacts',jwtAuthMiddleware,async(req,res)=>{
     try{
         console.log('hit contact,',req.user.id);
         const userId=req.user.id;
-        const {data:userData,error}=await supabase
-        .from('contacts')
+        console.log(userId);
+        const result = [];
+        const{data:members,error:error1}=await supabase
+        .from('conversation_members')
         .select('*')
         .eq('user_id',userId);
 
-        if(error){
+        const convo_id=members.map(m=>m.conversation_id);
+        // const member_id=[];
+        // await Promise.all(
+        //     convo_id.map(async(convo)=>{
+        //         const{data:members_users,error}=await supabase
+        //         .from('conversation_members')
+        //         .select('*')
+        //         .eq('conversation_id',convo)
+        //         .neq('user_id', userId);
+
+        //         if(members_users){
+        //             members_users.forEach(m=>member_id.push(m.user_id));
+        //         }
+        // }));
+        // console.log('members id',member_id);
+        const{data:conver,error:error2}=await supabase
+        .from('conversations')
+        .select('*')
+        .in('id',convo_id);
+    
+        const types=conver.map(m=>({
+            type:m.type,
+            id:m.id}));
+            // console.log('types',types)
+        for (const type of types){
+            if(type.type=='private'){
+                const {data:member_data,error:error4}=await supabase
+                .from('conversation_members')
+                .select('*')
+                .eq('conversation_id',type.id)
+                .neq('user_id', userId)
+                .single();
+
+                const{data:userData,error:error5}=await supabase
+                .from('users')
+                .select('*')
+                .eq('id',member_data.user_id)
+                .single();
+
+                result.push({
+                    type: 'private',
+                    conversation_id: type.id,
+                    user: userData
+                })
+
+                // console.log('userData',userData)
+                console.log(userData)
+             }
+             else if(type.type=='group'){
+                const{data:userData,error:error5}=await supabase
+                .from('conversations')
+                .select('*')
+                .eq('id',type.id)
+                .single();
+
+                result.push({
+                    type: 'group',
+                    conversation_id: type.id,
+                    user: userData
+                })
+             }
+        }
+        
+
+        if(error2){
             res.status(500).json({error:'Database Error'})
         }
-        res.json(userData);
+
+        if(error1){
+            res.status(500).json({error:'Database Error'})
+        }
+        console.log('final result',result);
+        res.json(result);
     }
     catch(err){
         console.log(err);
@@ -413,7 +554,32 @@ app.get('/deletcontact',jwtAuthMiddleware,async(req,res)=>{
         res.status(500).json({message:'Sever Error'});
     }
 })
+//addgroup
+app.post('/addgroup',jwtAuthMiddleware,async(req,res)=>{
+    try{
+        const user_id=req.user.id;
+        const {addedUsers,groupname,send_image}=req.body;
 
+        const {data:newConvo,error}=await supabase
+        .from('conversations')
+        .insert([{created_by:user_id,name:groupname,group_pic:send_image,type:'group'}])
+        .select()
+        .single()
+
+        for(const user of addedUsers){
+            const{data,error}=await supabase
+            .from('conversation_members')
+            .insert([{conversation_id:newConvo.id,user_id:user.id,role:'member'}]);
+        }
+        const{data,error2}=await supabase
+        .from('conversation_members')
+        .insert([{conversation_id:newConvo.id,user_id:user_id,role:'admin'}]); 
+
+        res.json({message:"User Added"})
+    }catch(err){
+        console.log(err);
+    }
+})
 //viewchat
 
 app.get('/getMessages',jwtAuthMiddleware,async(req,res)=>{

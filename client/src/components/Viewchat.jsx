@@ -18,7 +18,9 @@ const Viewchat = ({setView,selectedChat}) => {
       const [option,setOption]=useState(false);
       const [profile,setProfile]=useState(false);
       const [profileInfo,setProfileInfo]=useState([]);
+      const [fastImage,setFastImage]=useState(false);
       const inputRef = useRef(null);
+      console.log('selected chat:',selectedChat);
     const handleChange=async()=>{
         if (sendmessage.trim() === "" && !image) return;
         let messageData = {};
@@ -54,6 +56,9 @@ const Viewchat = ({setView,selectedChat}) => {
                 receiver_id: selectedChat.contact_user_id,
                 type
             };
+            if(type==='image'){
+                setFastImage(true);
+            }
             await axios.post('http://localhost:8860/message_send',{convo_id:selectedChat.id,content,type:type},{headers:{Authorization:`Bearer ${token}`}});
         }catch(err){
             console.log(err);
@@ -151,6 +156,7 @@ const Viewchat = ({setView,selectedChat}) => {
 
     const closeProfile=()=>{
         setProfile(false);
+        setOption(false);
         setProfileInfo([]);
     }
   return (
@@ -163,6 +169,7 @@ const Viewchat = ({setView,selectedChat}) => {
                   <p style={{color:'rgb(77, 75, 75)'}}>{selectedChat.user.email}</p>
                   </div>
               </div>
+      
                 <div className='select-viewchat'>
                     <button className='select-viewchat-button' onClick={()=>setOption(!option)}><FontAwesomeIcon icon={faEllipsisVertical}/></button>
                     {option &&(
@@ -172,7 +179,6 @@ const Viewchat = ({setView,selectedChat}) => {
                     </div>
                 )}
                 </div>
-                
         </div>  
         <div className="chats">
             <div className="chat-container-viewchat">
@@ -184,7 +190,7 @@ const Viewchat = ({setView,selectedChat}) => {
                                 <div className={`message-bubble ${checkmessage ? 'bubble-user' : 'bubble-other'}`}>
                                     {m.message_type==='image' ?
                                     (<img src={m.content} alt="sent content" className="message-image"></img>):
-                                    (m.content)
+                                        fastImage ? (<img src={m.content} alt="sent content" className="message-image"></img>):((m.content))
                                     }
                                 </div>
                             </div>
@@ -193,6 +199,7 @@ const Viewchat = ({setView,selectedChat}) => {
                 }
                 {
                    profile && (
+                    <div className="profile-outer">
                     <div className="information">
                         <div className="cross-viewChat" onClick={()=>closeProfile()}><FontAwesomeIcon icon={faXmark} style={{color: "rgb(99, 230, 190)",}} /></div>
                         <div className="profile_pic"><img src={profileInfo.profile_pic} alt='profile_pic' className='profile'></img>
@@ -202,6 +209,7 @@ const Viewchat = ({setView,selectedChat}) => {
                         <p style={{fontSize:'1.5rem',marginBottom:'3%'}}>{profileInfo.name}</p>
                         <p style={{fontSize:'1rem' ,color:'grey'}}>Bio </p>
                         <p style={{fontSize:'1.5rem'}}>{profileInfo.bio}</p>
+                    </div>
                     </div>
                    ) 
                 }
