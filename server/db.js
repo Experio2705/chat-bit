@@ -13,7 +13,8 @@ import { createServer } from 'node:http';
 dotenv.config();
 const app=express();
 app.use(cors({
-  origin: "*"
+  origin: "https://chat-bit-orcin.vercel.app",
+  credentials: true
 }));
 app.use(express.json());
 const supabase = createClient(
