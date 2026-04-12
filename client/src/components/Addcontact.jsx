@@ -15,7 +15,7 @@ const Addcontact = ({setView}) => {
     const[notfound,setNotfound]=useState(false);
     const[found,setFound]=useState(false);
     const [addedUsers, setAddedUsers] = useState([]);
-    const [exists,setExists]=useState(false);
+    const [exists,setExists]=useState([]);
     const handleChange=async(e)=>{
         const value=e.target.value;
         setFind(value);
@@ -50,18 +50,18 @@ const Addcontact = ({setView}) => {
     const handleAdd=async(user)=>{
         try{
             const contact_user_id=user.id;
-            const add_contact_name=user.name;
-            const add_contact_email=user.email;
-            const add_contact_profilepic=user.profile_pic;
+            // const add_contact_name=user.name;
+            // const add_contact_email=user.email;
+            // const add_contact_profilepic=user.profile_pic;
             const token=localStorage.getItem('token');
             // const res=await axios.post('http://localhost:8860/addcontact',{add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic},{headers:{Authorization:`Bearer ${token}`}});
-            const res=await axios.post('http://localhost:8860/addcontact',{contact_user_id},{headers:{Authorization:`Bearer ${token}`}});
+            const res=await axios.post('http://localhost:8860/conversation',{contact_user_id},{headers:{Authorization:`Bearer ${token}`}});
             if(res.data.message==='Contactadded'){
                 setAddedUsers(prev => [...prev, user.id]);
                 window.location.reload() 
             }
             else if(res.data.message==='Conversation Exists'){
-                setExists(true);
+                setExists(prev => [...prev, user.id]);
             }
         }
         catch(err){
@@ -89,9 +89,9 @@ const Addcontact = ({setView}) => {
             {search && <div className='show-contact-search'><p><FontAwesomeIcon icon={faPersonCirclePlus} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Add new Contact</p></div>}
             {notfound && <div className='show-contact-search'><p><FontAwesomeIcon icon={faFaceFrown} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Not Found</p></div>}
             {found &&
-                exists?(<div className='show-contact-search'><p><FontAwesomeIcon icon={faFaceFrown} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Contact Already Exists</p></div>):(
                 <div className="contact-list">
                     {contact.map((user)=>(
+                        exists.includes(user.id)?(<div className='show-contact-search' style={{height:'180px'}}><p><FontAwesomeIcon icon={faFaceFrown} style={{color: "rgb(60, 60, 60)"}} /></p><p style={{color: "rgb(60, 60, 60)"}} >Contact Already Exists</p></div>):(
                         <div key={user.id} className="contact-item">
                             <img src={user.profile_pic} className='chat-profile'  alt='profile-image'></img>
                             <div className="name-email-contact">
@@ -101,9 +101,10 @@ const Addcontact = ({setView}) => {
                             {addedUsers.includes(user.id) ?<p className='add-contact-icon'><FontAwesomeIcon icon={faCheck} className='contact-icon' style={{fontSize:'2rem'}} /></p>
                             :<p className='add-contact-icon'><FontAwesomeIcon icon={faUserPlus} onClick={()=>handleAdd(user)} className='contact-icon' style={{fontSize:'2rem'}} /></p>}
                         </div>
+                        )
                     ))}
                 </div>
-                )
+
             }
         </div>
     </div>

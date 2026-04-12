@@ -402,7 +402,7 @@ app.get('/contacts',jwtAuthMiddleware,async(req,res)=>{
         const types=conver.map(m=>({
             type:m.type,
             id:m.id}));
-            // console.log('types',types)
+            
         for (const type of types){
             if(type.type=='private'){
                 const {data:member_data,error:error4}=await supabase
@@ -423,9 +423,6 @@ app.get('/contacts',jwtAuthMiddleware,async(req,res)=>{
                     conversation_id: type.id,
                     user: userData
                 })
-
-                // console.log('userData',userData)
-                console.log(userData)
              }
              else if(type.type=='group'){
                 const{data:userData,error:error5}=await supabase
@@ -450,7 +447,6 @@ app.get('/contacts',jwtAuthMiddleware,async(req,res)=>{
         if(error1){
             res.status(500).json({error:'Database Error'})
         }
-        console.log('final result',result);
         res.json(result);
     }
     catch(err){
@@ -470,7 +466,10 @@ app.post('/conversation', jwtAuthMiddleware, async (req, res) => {
       .select('conversation_id')
       .eq('user_id', userId);
 
+    console.log(userConvo)
+
     if (error) {
+        console.log(error);
       return res.status(500).json({ error: "Database Error" });
     }
 
@@ -480,10 +479,11 @@ app.post('/conversation', jwtAuthMiddleware, async (req, res) => {
     if (userConvo && userConvo.length > 0) {
       for (let convo of userConvo) {
         const { data } = await supabase
-          .from('conversation_members')
-          .select('*')
-          .eq('conversation_id', convo.conversation_id)
-          .eq('user_id', contact_user_id);
+        .from('conversation_members')
+        .select(`conversation_id,conversations!inner(type)`)
+        .eq('conversation_id', convo.conversation_id)
+        .eq('user_id', contact_user_id)
+        .eq('conversations.type', 'private');
 
         if (data.length > 0) {
           existingConversation = convo.conversation_id;
@@ -491,6 +491,7 @@ app.post('/conversation', jwtAuthMiddleware, async (req, res) => {
         }
       }
     }
+    console.log('existing:',existingConversation);
 
     // ✅ if exists → return ID
     if (existingConversation) {
@@ -524,7 +525,7 @@ app.post('/conversation', jwtAuthMiddleware, async (req, res) => {
     }
 
     res.json({
-      message: 'Conversation Created',
+      message: 'Contactadded',
       conversationId: newConvo.id
     });
 
@@ -536,16 +537,47 @@ app.post('/conversation', jwtAuthMiddleware, async (req, res) => {
 app.get('/deletcontact',jwtAuthMiddleware,async(req,res)=>{
     try{
         const user_id=req.user.id;
-        const {query}=req.query;
-        if (!query || query.length < 2) {
+        const {query1,query2}=req.query;
+        console.log(query1);
+        console.log(query2);
+        if (!query1 || query1.length < 2) {
         return res.json([]);
         }
+        if(query2==='private'){
+            const {data:data1,error:error1}=await supabase
+            .from('conversations')
+            .delete()
+            .eq('id',query1);
 
-        const {data,error}=await supabase
-        .from('contacts')
-        .delete()
-        .eq('user_id',user_id)
-        .eq('contact_user_id',query);
+            const {data:data2,error:error2}=await supabase
+            .from('conversation_members')
+            .delete()
+            .eq('conversation_id',query1)
+        }
+        else {
+            const{data:userAdmin,error}=await supabase
+            .from('conversation_members')
+            .select(`role`)
+            .eq('conversation_id',query1)
+            .eq('user_id',user_id)
+            .single();
+            if (!userAdmin || userAdmin.role !== 'admin') {
+                return res.json({message:'notadmin'})
+                }
+            else{
+                const {data:data1,error:error1}=await supabase
+                .from('conversations')
+                .delete()
+                .eq('id',query1);
+
+            const {data:data2,error:error2}=await supabase
+                .from('conversation_members')
+                .delete()
+                .eq('conversation_id',query1)
+            }
+            res.json({message:'done'});
+            console.log(userAdmin);
+        }
 
         if(error){
             res.status(500).json({message:'Sever Error'});    
@@ -651,24 +683,88 @@ app.get('/deleteChat',jwtAuthMiddleware,async(req,res)=>{
 })
 app.get('/showprofile',jwtAuthMiddleware,async(req,res)=>{
     try{
-        const {query} = req.query;
-        const {data,error}=await supabase
-        .from('users')
-        .select('*')
-        .eq('id',query)
-        .single();
+        const { query1, query2 } = req.query;
+        if(query2==='private'){
+            const {data,error}=await supabase
+            .from('users')
+            .select('*')
+            .eq('id',query1)
+            .single();
 
-        if(error){
+            if(error){
+                res.status(500).json({message:'Databse Error'});
+                console.log(error)
+            }
+            return res.json({data,type:'private'});
+        }
+        else{
+            const {data,error}=await supabase
+            .from('conversations')
+            .select('*')
+            .eq('id',query1)
+            .single();
+
+            if(error){
             res.status(500).json({message:'Databse Error'});
             console.log(error)
+            }
+            return res.json({data,type:'group'});
         }
-
-        res.json({data});
+        
     }
     catch(err){
         res.status(500).json({message:'Server Error'});
         console.log(err);
     }
+})
+
+//profile
+app.get('/get-profile',jwtAuthMiddleware,async(req,res)=>{
+    try{
+        const user_id=req.user.id;
+        const {data,error}=await supabase
+        .from('users')
+        .select('*')
+        .eq('id',user_id)
+        .single();
+
+        if(error){
+            res.status(500).json({message:'Database Error'});
+        }
+        res.json(data);
+    }catch(err){
+        res.status(500).json({message:'Server Error'});
+    }
+
+})
+
+//profile
+app.post('/update-info',jwtAuthMiddleware,async(req,res)=>{
+    const userId=req.user.id;
+    const { name, bio, location, new_image, old_image } = req.body;
+    let updateFields = {};
+    if (name) updateFields.name = name;
+    if (bio) updateFields.bio = bio;
+    if (location) updateFields.location = location;
+    if (new_image) updateFields.profile_pic = new_image;
+
+    const { error } = await supabase
+    .from("users")
+    .update(updateFields)
+    .eq("id", userId);
+
+    if (old_image && new_image) {
+      const oldPath = old_image.split("/profiles/")[1];
+
+      await supabase.storage
+        .from("profiles")
+        .remove([oldPath]);
+    }
+    res.json({message:'Updated Successfully'})
+    if (error) {
+      return res.status(500).json({ message:'Error' });
+    }
+
 })
 
 const PORT=process.env.PORT||8860;

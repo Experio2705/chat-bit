@@ -21,3 +21,19 @@
     cursor: pointer;
     background-color: green;
 }
+.message-contacts{
+    position: absolute;
+    z-index: 999;
+    font-size: 2rem;
+    padding: 20px;
+    height: 45%;
+    width: 40%;
+    margin-left: 8%;
+    margin-bottom: 8%;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+}

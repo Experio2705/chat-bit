@@ -108,7 +108,7 @@ const AddGroup = ({setView}) => {
             if(image){
                 const filePath = `chat/${Date.now()}_${image.name}`;
                 const { data, error}= await supabase.storage
-                .from('images')
+                .from('profiles')
                 .upload(filePath,image);
 
                 if(error){
@@ -121,7 +121,6 @@ const AddGroup = ({setView}) => {
 
                 send_image=publicUrl.publicUrl;
                 }
-            console.log('image',send_image);
             const res=await axios.post('http://localhost:8860/addgroup',{addedUsers,groupname,send_image},{headers:{Authorization:`Bearer ${token}`}});
             setMessage(res.data.message);
             setMessagepresent(true);

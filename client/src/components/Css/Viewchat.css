@@ -141,17 +141,23 @@
 }
 
 .profile-outer{
-    height: 10%;
+    position: absolute;  
+    top: 0;
+    left: 0;
+    height: 100%;
     width: 100%;
     display: grid;
     place-items: center;
+    background: rgba(0,0,0,0.3);
+    z-index: 999;
 }
 .information{
     position: absolute;
     z-index: 1;
-    height: 50%;
-    width: 52%;
+    height: 45%;
+    width: 40%;
     margin-bottom: 8%;
+    margin-left: 20%;
     background-color: rgba(255, 255, 255, 0.8);;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     padding: 20px;
@@ -160,7 +166,6 @@
     display: flex;
     justify-content: flex-end;
     font-size: 1.3rem;
-    margin-bottom: 4%;
     cursor: pointer;
 }
 .profile_pic{

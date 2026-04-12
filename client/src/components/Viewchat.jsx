@@ -17,10 +17,10 @@ const Viewchat = ({setView,selectedChat}) => {
       const [preview,setPreview]=useState(null);
       const [option,setOption]=useState(false);
       const [profile,setProfile]=useState(false);
-      const [profileInfo,setProfileInfo]=useState([]);
+      const [profileInfo,setProfileInfo]=useState(null);
       const [fastImage,setFastImage]=useState(false);
+      const [type,setType]=useState(null);
       const inputRef = useRef(null);
-      console.log('selected chat:',selectedChat);
     const handleChange=async()=>{
         if (sendmessage.trim() === "" && !image) return;
         let messageData = {};
@@ -148,27 +148,40 @@ const Viewchat = ({setView,selectedChat}) => {
         if(!profile){
             try{
                 const token=localStorage.getItem('token');
-                const res1=await axios.get(`http://localhost:8860/showprofile?query=${selectedChat.contact_user_id}`,{headers:{Authorization:`Bearer ${token}`}});
+                const res1=await axios.get(`http://localhost:8860/showprofile?query1=${selectedChat.user.id}&query2=${selectedChat.type}`,{headers:{Authorization:`Bearer ${token}`}});
                 setProfileInfo(res1.data.data);
+                setProfile(true);
+                setType(res1.data.type);
             }catch(err){console.log(err);}
         }
     }
-
     const closeProfile=()=>{
         setProfile(false);
         setOption(false);
-        setProfileInfo([]);
+        setProfileInfo(null);
+        setType(null);
     }
   return (
     <div className="Addcontact-container">
         <div className="addcontact">
-              <div key={selectedChat.id} className="viewchat-item" >
-                  <img src={selectedChat.user.profile_pic} className='chat2-profile'  alt='profile-image'></img>
-                  <div className="name-email-contact">
-                  <p style={{fontSize:'1.3rem',fontWeight:'550'}}>{selectedChat.user.name}</p>
-                  <p style={{color:'rgb(77, 75, 75)'}}>{selectedChat.user.email}</p>
-                  </div>
-              </div>
+            {
+                selectedChat.type==='private'?(
+                    <div key={selectedChat.id} className="viewchat-item" >
+                        <img src={selectedChat.user.profile_pic} className='chat2-profile'  alt='profile-image'></img>
+                        <div className="name-email-contact">
+                            <p style={{fontSize:'1.3rem',fontWeight:'550'}}>{selectedChat.user.name}</p>
+                            <p style={{color:'rgb(77, 75, 75)'}}>{selectedChat.user.email}</p>
+                        </div>
+                    </div>
+                ):(
+                    <div key={selectedChat.id} className="viewchat-item" >
+                        <img src={selectedChat.user.group_pic} className='chat2-profile'  alt='profile-image'></img>
+                        <div className="name-email-contact">
+                            <p style={{fontSize:'1.3rem',fontWeight:'550'}}>{selectedChat.user.name}</p>
+                        </div>
+                    </div>                   
+                )
+            }
       
                 <div className='select-viewchat'>
                     <button className='select-viewchat-button' onClick={()=>setOption(!option)}><FontAwesomeIcon icon={faEllipsisVertical}/></button>
@@ -198,18 +211,29 @@ const Viewchat = ({setView,selectedChat}) => {
                     })
                 }
                 {
-                   profile && (
+                   profile && profileInfo && (
                     <div className="profile-outer">
-                    <div className="information">
-                        <div className="cross-viewChat" onClick={()=>closeProfile()}><FontAwesomeIcon icon={faXmark} style={{color: "rgb(99, 230, 190)",}} /></div>
-                        <div className="profile_pic"><img src={profileInfo.profile_pic} alt='profile_pic' className='profile'></img>
-                        {profileInfo.email}
+                    {type==='private'?(
+                        <div className="information">
+                            <div className="cross-viewChat" onClick={()=>closeProfile()}><FontAwesomeIcon icon={faXmark} style={{color: "rgb(99, 230, 190)",}} /></div>
+                            <div className="profile_pic"><img src={profileInfo.profile_pic} alt='profile_pic' className='profile'></img>
+                            {profileInfo.email}
+                            </div>
+                            <p style={{fontSize:'1rem' ,color:'grey'}}>Name </p>
+                            <p style={{fontSize:'1.5rem',marginBottom:'3%'}}>{profileInfo.name}</p>
+                            <p style={{fontSize:'1rem' ,color:'grey'}}>Bio </p>
+                            <p style={{fontSize:'1.5rem'}}>{profileInfo.bio}</p>
                         </div>
-                        <p style={{fontSize:'1rem' ,color:'grey'}}>Name </p>
-                        <p style={{fontSize:'1.5rem',marginBottom:'3%'}}>{profileInfo.name}</p>
-                        <p style={{fontSize:'1rem' ,color:'grey'}}>Bio </p>
-                        <p style={{fontSize:'1.5rem'}}>{profileInfo.bio}</p>
-                    </div>
+                    ):(
+                        <div className="information">
+                            <div className="cross-viewChat" onClick={()=>closeProfile()}><FontAwesomeIcon icon={faXmark} style={{color: "rgb(99, 230, 190)",}} /></div>
+                            <div className="profile_pic"><img src={profileInfo.group_pic} alt='profile_pic' className='profile'></img>
+                            </div>
+                            <p style={{fontSize:'1rem' ,color:'grey'}}>Name </p>
+                            <p style={{fontSize:'1.5rem',marginBottom:'3%'}}>{profileInfo.name}</p>
+
+                        </div>
+                        )}
                     </div>
                    ) 
                 }

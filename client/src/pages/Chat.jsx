@@ -23,11 +23,11 @@ const Chat = () => {
   const renderView=()=>{
     switch(view){
       // case 'chat': return <Chat chat={selectedChat}/>;
-      case 'profile': return <Profile user={user} setView={setView}/>;
+      case 'profile': return <Profile setView={setView}/>;
       case 'addcontact': return <Addcontact setView={setView}/>;
       case 'addgroup':return <AddGroup/>;
       case 'otherwise':return <Otherwise setView={setView}/>;
-      case 'contacts':return <Contacts setView={setView} setSelectedChat={setSelectedChat}/>
+      case 'contacts':return <Contacts setView={setView} setSelectedChat={setSelectedChat} selectedChat={selectedChat}/>
       case 'viewchat':return <Viewchat setView={setView} selectedChat={selectedChat}/>
       default:
         return <Otherwise user={user} setView={setView}/>
@@ -145,6 +145,7 @@ const Chat = () => {
                   <img src={user11.user.group_pic} className='chat2-profile'  alt='profile-image'></img>
                   <div className="name-email-contact">
                   <p style={{fontSize:'1.3rem',fontWeight:'550'}}>{user11.user.name}</p>
+                  <p style={{color:'rgb(77, 75, 75)'}}>{user11.type}</p>
                   </div>
                 </div>
               )
