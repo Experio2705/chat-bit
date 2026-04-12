@@ -6,7 +6,7 @@
 }
 
 .chats{
-    background-image: url("./src/assets/chatbackground.png");
+    background-image: url("../assets/chatbackground.png");
     background-size: cover;
     height: 85.5vb;
     padding: 20px;

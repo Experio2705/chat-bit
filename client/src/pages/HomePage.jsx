@@ -3,7 +3,7 @@ import './Css/HomePage.css'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Line from '../components/line'
+import Line from './Components/Line'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faMessage,faLock,faImage} from '@fortawesome/free-solid-svg-icons';
 import socket from './socket.js'

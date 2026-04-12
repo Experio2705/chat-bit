@@ -2,7 +2,7 @@ import React from 'react'
 import './Css/Privacy.css'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Line from '../components/line'
+import Line from '../components/Line'
 const Privacy = () => {
   return (
     <div>

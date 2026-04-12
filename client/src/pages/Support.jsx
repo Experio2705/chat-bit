@@ -1,7 +1,7 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import Line from '../components/line'
+import Line from '../components/Line'
 import './Css/Support.css'
 
 const Support = () => {
