@@ -22,8 +22,8 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
-const upload=multer({
-    storage:multer.memoryStorage(),
+const upload = multer({
+  storage: multer.memoryStorage()
 });
 
 ///socket
