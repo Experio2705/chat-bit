@@ -54,7 +54,6 @@ const Register = () => {
         else{
             try{
                 const otp=Math.floor(100000+Math.random()*900000)
-                console.log(email);
                 const templateParams = {
                     email: email,
                     passcode: otp,
@@ -68,8 +67,8 @@ const Register = () => {
                     )
                     .then(async() => {
                         setMessage('Otp Send');
-                        await axios.post('http://localhost:8860/Register',{email,password});
-                        await axios.post('http://localhost:8860/otp-store',{email,otp});
+                        await axios.post('https://chat-bit-xl7u.onrender.com/Register',{email,password});
+                        await axios.post('https://chat-bit-xl7u.onrender.com/otp-store',{email,otp});
                         localStorage.setItem('email',email);
                         navigate('/Authenticate', { state: { mode: 'signup' } });
                     })

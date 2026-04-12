@@ -18,10 +18,8 @@ const Login = () => {
         setPassword(e.target.value);
     }
     const handleChange1=async()=>{
-        console.log('pressed');
         const checkmail=/^[a-zA-Z0-9.]{5,}@gmail\.com$/;
         const checkpass=/^[a-zA-Z0-9@./$%&*()]{8,}$/;
-        console.log(email,',',password);
         if(!checkmail.test(email) && !checkpass.test(password)){
             setMessage('Please Enter correct Info');
         }
@@ -32,9 +30,8 @@ const Login = () => {
             setMessage('Wrong Pass format pass>8 !');
         }
         else{
-            const res =await axios.post('http://localhost:8860/login',{email,password});
+            const res =await axios.post('https://chat-bit-xl7u.onrender.com/login',{email,password});
             if(res.data.message==='verified'){
-                console.log(res.data.token);
                 localStorage.setItem('token',res.data.token);
                 localStorage.setItem('email',email);
                 setMessage('Login Successfull !');
@@ -65,14 +62,13 @@ const Login = () => {
                     setMessage('Please enter email to receive otp');
                     return;
                 }
-                const res=await axios.post('http://localhost:8860/reset',{email});
+                const res=await axios.post('https://chat-bit-xl7u.onrender.com/reset',{email});
                 if(res.data.message==='notfound'){
                    setMessage('User not found !');
                    return
                 }
                 else if(res.data.message==='found'){
                     const otp=Math.floor(100000+Math.random()*900000)
-                    console.log(email);
                     const templateParams = {
                         email: email,
                         passcode: otp,
@@ -87,7 +83,7 @@ const Login = () => {
                     .then(async() => {
                         setMessage('Otp Send');
                         localStorage.setItem('email',email);
-                        await axios.post('http://localhost:8860/otp-store',{email,otp});
+                        await axios.post('https://chat-bit-xl7u.onrender.com/otp-store',{email,otp});
                         navigate('/Authenticate', { state: { mode: 'reset' } });
                     })
                 }

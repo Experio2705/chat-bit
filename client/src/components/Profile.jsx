@@ -21,12 +21,11 @@ const Profile = ({setView}) => {
     useEffect(()=>{
       const fetchData = async () => {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:8860/get-profile',{ headers: { Authorization: `Bearer ${token}` } });
+        const res = await axios.get('https://chat-bit-xl7u.onrender.com/get-profile',{ headers: { Authorization: `Bearer ${token}` } });
         setuserData([res.data]);
         };
         fetchData();
         },[]);
-    console.log(userData);
     const handleImageChange = (e) => {
         const file = e.target.files[0];
 
@@ -39,6 +38,9 @@ const Profile = ({setView}) => {
       setEdit(!edit);
       setImage(null);
       setPreview(null);
+      setDname('');
+      setBio('');
+      setLocation('');
     }
     const inputChange1=(e)=>{
         setDname(e.target.value);
@@ -80,7 +82,7 @@ const Profile = ({setView}) => {
             return;
             }
         const token =localStorage.getItem('token');
-        const res=await axios.post('http://localhost:8860/update-info',payload,{headers:{Authorization:`Bearer ${token}`}});
+        const res=await axios.post('https://chat-bit-xl7u.onrender.com/update-info',payload,{headers:{Authorization:`Bearer ${token}`}});
         if(res.data.message==='Updated Successfully'){
           window.location.reload();
         }

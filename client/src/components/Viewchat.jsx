@@ -7,7 +7,6 @@ import './Css/Viewchat.css';
 import socket from './socket.js';
 import { text } from '@fortawesome/fontawesome-svg-core';
 import {supabase} from './lib.js';
-import Line from './line.jsx';
 const Viewchat = ({setView,selectedChat}) => {
       const [convo_id,setConvo_id]=useState(null);
       const [message,setMessage]=useState([]);
@@ -59,7 +58,7 @@ const Viewchat = ({setView,selectedChat}) => {
             if(type==='image'){
                 setFastImage(true);
             }
-            await axios.post('http://localhost:8860/message_send',{convo_id:selectedChat.id,content,type:type},{headers:{Authorization:`Bearer ${token}`}});
+            await axios.post('https://chat-bit-xl7u.onrender.com/message_send',{convo_id:selectedChat.id,content,type:type},{headers:{Authorization:`Bearer ${token}`}});
         }catch(err){
             console.log(err);
         }
@@ -89,8 +88,7 @@ const Viewchat = ({setView,selectedChat}) => {
         const getMessages=async()=>{
             try{
                 const token=localStorage.getItem('token')
-                const res=await axios.get(`http://localhost:8860/getMessages?query=${selectedChat.id}`,{headers:{Authorization:`Bearer ${token}`}});
-                // console.log(res.data.data);
+                const res=await axios.get(`https://chat-bit-xl7u.onrender.com/getMessages?query=${selectedChat.id}`,{headers:{Authorization:`Bearer ${token}`}});
                 const reversedData = res.data.data.toReversed();
                 setMessage(reversedData);
                 setUserId(res.data.user_id)
@@ -136,7 +134,7 @@ const Viewchat = ({setView,selectedChat}) => {
     const deleteChat=async()=>{
         try{
             const token=localStorage.getItem('token');
-            await axios.get(`http://localhost:8860/deleteChat?query=${selectedChat.id}`,{headers:{Authorization:`Bearer ${token}`}});
+            await axios.get(`https://chat-bit-xl7u.onrender.com/deleteChat?query=${selectedChat.id}`,{headers:{Authorization:`Bearer ${token}`}});
             window.location.reload();
         }catch(err){
             console.log(err);
@@ -148,7 +146,7 @@ const Viewchat = ({setView,selectedChat}) => {
         if(!profile){
             try{
                 const token=localStorage.getItem('token');
-                const res1=await axios.get(`http://localhost:8860/showprofile?query1=${selectedChat.user.id}&query2=${selectedChat.type}`,{headers:{Authorization:`Bearer ${token}`}});
+                const res1=await axios.get(`https://chat-bit-xl7u.onrender.com/showprofile?query1=${selectedChat.user.id}&query2=${selectedChat.type}`,{headers:{Authorization:`Bearer ${token}`}});
                 setProfileInfo(res1.data.data);
                 setProfile(true);
                 setType(res1.data.type);

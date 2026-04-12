@@ -28,7 +28,7 @@ const Addcontact = ({setView}) => {
             }
         const token=localStorage.getItem('token');
         try{
-            const res=await axios.get(`http://localhost:8860/add-contact?query=${value}`,{headers:{Authorization:`Bearer ${token}`}})
+            const res=await axios.get(`https://chat-bit-xl7u.onrender.com/add-contact?query=${value}`,{headers:{Authorization:`Bearer ${token}`}})
             setContact(res.data);
             console.log(res.data);
             if (res.data.length === 0) {
@@ -55,7 +55,7 @@ const Addcontact = ({setView}) => {
             // const add_contact_profilepic=user.profile_pic;
             const token=localStorage.getItem('token');
             // const res=await axios.post('http://localhost:8860/addcontact',{add_contact_id,add_contact_name,add_contact_email,add_contact_profilepic},{headers:{Authorization:`Bearer ${token}`}});
-            const res=await axios.post('http://localhost:8860/conversation',{contact_user_id},{headers:{Authorization:`Bearer ${token}`}});
+            const res=await axios.post('https://chat-bit-xl7u.onrender.com/conversation',{contact_user_id},{headers:{Authorization:`Bearer ${token}`}});
             if(res.data.message==='Contactadded'){
                 setAddedUsers(prev => [...prev, user.id]);
                 window.location.reload() 
@@ -68,7 +68,6 @@ const Addcontact = ({setView}) => {
             console.log(err);
         }
     }
-    console.log(contact);
   return (
     <div className="Addcontact-container">
         <div className="addcontact">

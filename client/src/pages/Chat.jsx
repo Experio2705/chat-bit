@@ -44,15 +44,13 @@ const Chat = () => {
       try{
         const token=localStorage.getItem('token');
         if(!token) console.log('no tokken found');
-        const res= await axios.get('http://localhost:8860/user',{headers:{Authorization:`Bearer ${token}`}});
-        const response= await axios.get('http://localhost:8860/contacts',{headers:{Authorization:`Bearer ${token}`}});
+        const res= await axios.get('https://chat-bit-xl7u.onrender.com/user',{headers:{Authorization:`Bearer ${token}`}});
+        const response= await axios.get('https://chat-bit-xl7u.onrender.com/contacts',{headers:{Authorization:`Bearer ${token}`}});
             if(response.data){
                 setContact(response.data);
                 setPresent(true);
-                console.log(response.data)
             }
         setUser(res.data);
-        console.log(res.data)
       }
       catch(err){
         console.log(err);
@@ -60,20 +58,15 @@ const Chat = () => {
     }
     getInfo();
   },[])
-  console.log('contact',contact);
   const addchat=async(user)=>{
         try{
-            console.log("reached-frontend!");
-            console.log('user',user);
             const token=localStorage.getItem('token');
-            console.log(token);
             if(user.type==='private'){
               setSelectedChat({
                   id: user.conversation_id,
                   user: user.user, 
                   type:'private'
               });
-              // console.log('send selected chat');
             }
             else if(user.type==='group'){
                 setSelectedChat({

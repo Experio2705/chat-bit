@@ -25,9 +25,8 @@ const Reset = () => {
             }
             else{
                 const email=localStorage.getItem('email');
-                const res =await axios.post('http://localhost:8860/reset-pass',{rpassword,email});
+                const res =await axios.post('https://chat-bit-xl7u.onrender.com/reset-pass',{rpassword,email});
                 if(res.data.message==='updated'){
-                    console.log('updated');
                     setMessage('Updated');
                     navigate('/Login');
                 }

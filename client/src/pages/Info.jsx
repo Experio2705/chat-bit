@@ -34,7 +34,6 @@ const Info = () => {
         }
         else{
             const token=localStorage.getItem('token');
-            console.log(token);
             const formData=new FormData();
             formData.append("image", image);
             formData.append("dname", dname);
@@ -42,7 +41,7 @@ const Info = () => {
             formData.append("pnumber", pnumber);
             formData.append("location", location);
             try{
-                await axios.post('http://localhost:8860/Info',formData,{headers:{Authorization:`Bearer ${token}`}});
+                await axios.post('https://chat-bit-xl7u.onrender.com/Info',formData,{headers:{Authorization:`Bearer ${token}`}});
                 navigate('/Chat');
             }
             catch(err){

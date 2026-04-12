@@ -13,12 +13,11 @@ const Contacts = ({setView,setSelectedChat,selectedChat}) => {
     const [message,setMessage]=useState(null);
     const gotoChat=()=>{
         setView('otherwise');
-        console.log('clicked')
     }
     useEffect(()=>{
         const getContacts=async()=>{
             const token=localStorage.getItem('token');
-           const res= await axios.get('http://localhost:8860/contacts',{headers:{Authorization:`Bearer ${token}`}});
+           const res= await axios.get('https://chat-bit-xl7u.onrender.com/contacts',{headers:{Authorization:`Bearer ${token}`}});
             if(res.data){
                 setContact(res.data);
                 setPresent(true);
@@ -26,11 +25,8 @@ const Contacts = ({setView,setSelectedChat,selectedChat}) => {
         }
         getContacts();
     },[]);
-    console.log('contact',contact);
     const addchat=async(user)=>{
- try{
-            console.log("reached-frontend!");
-            console.log('user',user);
+        try{
             const token=localStorage.getItem('token');
             console.log(token);
             if(user.type==='private'){
@@ -39,7 +35,6 @@ const Contacts = ({setView,setSelectedChat,selectedChat}) => {
                   user: user.user, 
                   type:'private'
               });
-              // console.log('send selected chat');
             }
             else if(user.type==='group'){
                 setSelectedChat({
@@ -58,7 +53,7 @@ const Contacts = ({setView,setSelectedChat,selectedChat}) => {
         try{
             const value=user.conversation_id;
             const token=localStorage.getItem('token');
-            const res=await axios.get(`http://localhost:8860/deletcontact?query1=${value}&query2=${user.type}`,{headers:{Authorization:`Bearer ${token}`}});
+            const res=await axios.get(`https://chat-bit-xl7u.onrender.com/deletcontact?query1=${value}&query2=${user.type}`,{headers:{Authorization:`Bearer ${token}`}});
             if(res.data.message==='notadmin'){
                 setMessage('Not an Admin')
             }

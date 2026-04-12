@@ -36,9 +36,8 @@ const AddGroup = ({setView}) => {
             }
         const token=localStorage.getItem('token');
         try{
-            const res=await axios.get(`http://localhost:8860/add-contact?query=${value}`,{headers:{Authorization:`Bearer ${token}`}})
+            const res=await axios.get(`https://chat-bit-xl7u.onrender.com/add-contact?query=${value}`,{headers:{Authorization:`Bearer ${token}`}})
             setContact(res.data);
-            console.log(res.data);
             if (res.data.length === 0) {
                 setNotfound(true);
                 setFound(false);
@@ -121,7 +120,7 @@ const AddGroup = ({setView}) => {
 
                 send_image=publicUrl.publicUrl;
                 }
-            const res=await axios.post('http://localhost:8860/addgroup',{addedUsers,groupname,send_image},{headers:{Authorization:`Bearer ${token}`}});
+            const res=await axios.post('https://chat-bit-xl7u.onrender.com/addgroup',{addedUsers,groupname,send_image},{headers:{Authorization:`Bearer ${token}`}});
             setMessage(res.data.message);
             setMessagepresent(true);
             setstartAddimage(false);
@@ -137,7 +136,6 @@ const AddGroup = ({setView}) => {
          if (addedUsers.length <= 1) {
             setYesornoAdded(false);
         }
-         console.log('added users',addedUsers);
     }
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -155,8 +153,6 @@ const AddGroup = ({setView}) => {
             setPreview(URL.createObjectURL(file)); 
         }
     };
-    console.log('added users',addedUsers);
-    console.log(contact);
   return (
     <div className="Addcontact-container">
         <div className="addcontact">

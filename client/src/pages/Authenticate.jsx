@@ -27,11 +27,10 @@ const Authenticate = () => {
     };
     const handleSubmit = async () => {
         let otp = inputsRef.current.map(input => input.value).join("");
-        console.log("OTP:", otp);
             if(mode=='signup'){
                 try{
                     const email=localStorage.getItem('email');
-                    const res=await axios.post('http://localhost:8860/Authenticate',{email,otp});
+                    const res=await axios.post('https://chat-bit-xl7u.onrender.com/Authenticate',{email,otp});
                     if(res.data.message==='Otp Expired' || res.data.message==='Invalid Otp'){
                         setMessage(res.data.message);
                         }
@@ -67,7 +66,7 @@ const Authenticate = () => {
                     )
                     .then(() => {
                         setMessage('Otp Send');
-                        axios.post('http://localhost:8860/otp-store',{email,otp});
+                        axios.post('https://chat-bit-xl7u.onrender.com/otp-store',{email,otp});
                         navigate('/Authenticate', { state: { mode: 'signup' } });
                     })
 
