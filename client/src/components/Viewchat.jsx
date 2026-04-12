@@ -19,6 +19,7 @@ const Viewchat = ({setView,selectedChat}) => {
       const [profileInfo,setProfileInfo]=useState(null);
       const [fastImage,setFastImage]=useState(false);
       const [type,setType]=useState(null);
+      const [user,setUser]=useState(null);
       const inputRef = useRef(null);
     const handleChange=async()=>{
         if (sendmessage.trim() === "" && !image) return;
@@ -89,9 +90,11 @@ const Viewchat = ({setView,selectedChat}) => {
             try{
                 const token=localStorage.getItem('token')
                 const res=await axios.get(`https://chat-bit-xl7u.onrender.com/getMessages?query=${selectedChat.id}`,{headers:{Authorization:`Bearer ${token}`}});
+                const response = await axios.get('https://chat-bit-xl7u.onrender.com/get-profile',{ headers: { Authorization: `Bearer ${token}` } });
                 const reversedData = res.data.data.toReversed();
                 setMessage(reversedData);
                 setUserId(res.data.user_id)
+                setUser(response.data);
             }
             catch(err){
                 console.log(err);
@@ -199,6 +202,7 @@ const Viewchat = ({setView,selectedChat}) => {
                         return (
                             <div key={m.id} className={`message-row ${checkmessage ? 'row-right' : 'row-left'}`}> 
                                 <div className={`message-bubble ${checkmessage ? 'bubble-user' : 'bubble-other'}`}>
+                                    <p>{user.name}</p>
                                     {m.message_type==='image' ?
                                     (<img src={m.content} alt="sent content" className="message-image"></img>):
                                         fastImage ? (<img src={m.content} alt="sent content" className="message-image"></img>):((m.content))
