@@ -1,6 +1,6 @@
 import {io} from 'socket.io-client'
 
-const socket=io("http://localhost:8860",{
+const socket=io("https://chat-bit-xl7u.onrender.com",{
     autoConnect:false,
 })
 
