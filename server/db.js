@@ -632,7 +632,7 @@ app.get('/getMessages',jwtAuthMiddleware,async(req,res)=>{
             profile_pic
             )
             `)
-      .eq('conversation_id', query);
+        .eq('conversation_id', query);
         if(error){
             res.status(500).json({error:'Database Error'});
         }
