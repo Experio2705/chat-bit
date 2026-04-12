@@ -623,10 +623,16 @@ app.get('/getMessages',jwtAuthMiddleware,async(req,res)=>{
     try{
         const user_id=req.user.id;
         const {query}=req.query;
-        const {data,error}=await supabase
+        const { data, error } = await supabase
         .from('messages')
-        .select('*')
-        .eq('conversation_id',query)
+        .select(`*,
+            sender:sender_id (
+            id,
+            name,
+            profile_pic
+            )
+            `)
+      .eq('conversation_id', query);
         if(error){
             res.status(500).json({error:'Database Error'});
         }

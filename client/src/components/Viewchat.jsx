@@ -202,7 +202,7 @@ const Viewchat = ({setView,selectedChat}) => {
                         return (
                             <div key={m.id} className={`message-row ${checkmessage ? 'row-right' : 'row-left'}`}> 
                                 <div className={`message-bubble ${checkmessage ? 'bubble-user' : 'bubble-other'}`}>
-                                    <p>{user.name}</p>
+                                    <p className='sender-name'>{m.sender.name}</p>
                                     {m.message_type==='image' ?
                                     (<img src={m.content} alt="sent content" className="message-image"></img>):
                                         fastImage ? (<img src={m.content} alt="sent content" className="message-image"></img>):((m.content))
