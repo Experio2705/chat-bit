@@ -152,15 +152,17 @@ app.post('/Info',jwtAuthMiddleware,upload.single('image'),async(req,res)=>{
     }
         const{data,error}=await supabase
         .from('users')
-        .update([{profile_pic:imageUrl,name:dname,bio,phone:pnumber,status:'online',location}])
+        .update({profile_pic:imageUrl,name:dname,bio,phone:pnumber,status:'online',location})
         .eq('id',userId)
         .select();
         if(error){
+            console.log(error);
             return res.status(400).json({error});
         }
         res.json({message:'User Register'});
     }
     catch(err){
+        console.log(err);
         res.status(500).json({error:err.message});
     }
 
